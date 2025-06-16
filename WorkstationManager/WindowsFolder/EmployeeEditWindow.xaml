@@ -1,0 +1,27 @@
+﻿<Window x:Class="WorkstationManager.WindowsFolder.EmployeeEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorkstationManager.WindowsFolder"
+        mc:Ignorable="d"
+        Title="EmployeeEditWindow" Height="350" Width="450"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid Margin="15">
+        <StackPanel>
+            <TextBlock Text="ФИО (*):" FontWeight="Bold"/>
+            <TextBox x:Name="FullNameTextBox" Margin="0,5,0,15" Text="{Binding FullName}"/>
+
+            <TextBlock Text="Отдел:" FontWeight="Bold"/>
+            <TextBox x:Name="DepartmentTextBox" Margin="0,5,0,15" Text="{Binding Department}"/>
+
+            <TextBlock Text="Должность:" FontWeight="Bold"/>
+            <TextBox x:Name="PositionTextBox" Margin="0,5,0,25" Text="{Binding Position}"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="SaveButton" Content="Сохранить" Width="100" Margin="5" Click="SaveButton_Click"/>
+                <Button x:Name="CancelButton" Content="Отмена" Width="100" Margin="5" IsCancel="True"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

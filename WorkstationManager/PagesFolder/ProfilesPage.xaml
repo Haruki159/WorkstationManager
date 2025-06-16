@@ -1,0 +1,84 @@
+﻿<Page x:Class="WorkstationManager.PagesFolder.ProfilesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WorkstationManager.PagesFolder"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ProfilesPage" Loaded="Page_Loaded">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Заголовок -->
+            <RowDefinition Height="*"/>
+            <!-- Основной контент -->
+        </Grid.RowDefinitions>
+
+        <!-- 1. Заголовок страницы -->
+        <TextBlock Grid.Row="0" Text="Управление профилями конфигураций" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="0,0,0,20"/>
+
+        <!-- 2. Основной контент: две панели -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <!-- Левая панель со списком профилей -->
+                <ColumnDefinition Width="15"/>
+                <!-- Разделитель -->
+                <ColumnDefinition Width="3*"/>
+                <!-- Правая панель с деталями -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Левая панель: список профилей -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Панель действий и поиска -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="AddButton" Content="➕ Добавить" Click="AddButton_Click" Margin="2"/>
+                        <Button x:Name="EditButton" Content="✏️ Изменить" Click="EditButton_Click" Margin="2"/>
+                        <Button x:Name="DeleteButton" Content="❌ Удалить" Background="#D9534F" Click="DeleteButton_Click" Margin="2"/>
+                    </StackPanel>
+                    <TextBox x:Name="SearchTextBox" Margin="0,10,0,0" FontSize="14" Padding="8" VerticalContentAlignment="Center" TextChanged="SearchTextBox_TextChanged"/>
+                </StackPanel>
+
+                <!-- Таблица профилей -->
+                <DataGrid Grid.Row="1"
+                          x:Name="ProfilesDataGrid"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          SelectionMode="Single"
+                          SelectionChanged="ProfilesDataGrid_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Название профиля" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="2*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+            <!-- Разделитель -->
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="LightGray"/>
+
+            <!-- Правая панель: детали выбранного профиля -->
+            <GroupBox x:Name="SelectedProfileGroupBox" Grid.Column="2" Header="Детали профиля" FontSize="16" FontWeight="SemiBold" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="Программное обеспечение в профиле:" FontSize="14" FontWeight="Normal" Margin="5,10,5,5"/>
+                    <ListBox x:Name="SoftwareInProfileListBox"
+                             Margin="5"
+                             Background="White"
+                             BorderBrush="LightGray"
+                             BorderThickness="1"
+                             MinHeight="200"
+                             DisplayMemberPath="Name"/>
+                    <!-- DisplayMemberPath="Name" автоматически покажет поле Name из объекта Software -->
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Page>

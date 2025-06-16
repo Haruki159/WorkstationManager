@@ -1,0 +1,78 @@
+﻿<Window x:Class="WorkstationManager.WindowsFolder.ProfileEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorkstationManager.WindowsFolder"
+        mc:Ignorable="d"
+        Title="Редактирование профиля" Height="500" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Основная информация о профиле -->
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Название профиля (*):" FontWeight="Bold"/>
+            <TextBox Margin="0,5,0,10" Text="{Binding Name}"/>
+            <TextBlock Text="Описание:" FontWeight="Bold"/>
+            <TextBox Margin="0,5,0,15" Text="{Binding Description}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
+        </StackPanel>
+
+        <!-- Панель выбора ПО -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Левая колонка: Все доступное ПО -->
+            <GroupBox Header="Доступное ПО" Grid.Column="0" Margin="0,0,5,0">
+                <ListBox x:Name="AvailableSoftwareListBox" DisplayMemberPath="Name" SelectionMode="Extended"/>
+            </GroupBox>
+
+            <!-- Центральная колонка: Кнопки -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="5">
+                <Button x:Name="AddSoftwareButton" Content="&gt;&gt;" Margin="5" Padding="10,5" Click="AddSoftwareButton_Click"/>
+                <Button x:Name="RemoveSoftwareButton" Content="&lt;&lt;" Margin="5" Padding="10,5" Click="RemoveSoftwareButton_Click"/>
+            </StackPanel>
+
+            <!-- Правая колонка: ПО в этом профиле -->
+            <GroupBox Header="ПО в профиле" Grid.Column="2" Margin="5,0,0,0">
+                <!-- ИЗМЕНЕНО: Заменяем ListBox на ListView -->
+                <ListView x:Name="ProfileSoftwareListView" SelectionMode="Extended">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Название ПО -->
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center"/>
+
+                                <!-- CheckBox для статуса установки -->
+                                <CheckBox Grid.Column="1" 
+                              IsChecked="{Binding IsInstalled}" 
+                              Margin="10,0,0,0" 
+                              VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </GroupBox>
+        </Grid>
+
+        <!-- Кнопки Сохранить/Отмена -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="Сохранить" Width="100" Margin="5" Click="SaveButton_Click"/>
+            <Button Content="Отмена" Width="100" Margin="5" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

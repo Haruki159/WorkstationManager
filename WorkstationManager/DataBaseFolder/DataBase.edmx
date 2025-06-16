@@ -1,0 +1,671 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="WorkstationManagerDB_v2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ActionLog">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ComputerID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ActionDate" Type="datetime" Nullable="false" />
+          <Property Name="LogText" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Computers">
+          <Key>
+            <PropertyRef Name="ComputerID" />
+          </Key>
+          <Property Name="ComputerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="InventoryNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="Manufacturer" Type="nvarchar" MaxLength="100" />
+          <Property Name="Model" Type="nvarchar" MaxLength="100" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="ProfileID" Type="int" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ComputerStatuses">
+          <Key>
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="StatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ConfigurationProfiles">
+          <Key>
+            <PropertyRef Name="ProfileID" />
+          </Key>
+          <Property Name="ProfileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Department" Type="nvarchar" MaxLength="150" />
+          <Property Name="Position" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="InstalledSoftware">
+          <Key>
+            <PropertyRef Name="ComputerID" />
+            <PropertyRef Name="SoftwareID" />
+          </Key>
+          <Property Name="ComputerID" Type="int" Nullable="false" />
+          <Property Name="SoftwareID" Type="int" Nullable="false" />
+          <Property Name="IsInstalled" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProfileSoftware">
+          <Key>
+            <PropertyRef Name="ProfileID" />
+            <PropertyRef Name="SoftwareID" />
+          </Key>
+          <Property Name="ProfileID" Type="int" Nullable="false" />
+          <Property Name="SoftwareID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Software">
+          <Key>
+            <PropertyRef Name="SoftwareID" />
+          </Key>
+          <Property Name="SoftwareID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Publisher" Type="nvarchar" MaxLength="255" />
+          <Property Name="Version" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__ActionLog__Compu__4316F928">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActionLog" Type="Self.ActionLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="ComputerID" />
+            </Principal>
+            <Dependent Role="ActionLog">
+              <PropertyRef Name="ComputerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ActionLog__UserI__440B1D61">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ActionLog" Type="Self.ActionLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ActionLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Computers__Emplo__398D8EEE">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Computers" Type="Self.Computers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Computers">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Computers__Profi__3A81B327">
+          <End Role="ConfigurationProfiles" Type="Self.ConfigurationProfiles" Multiplicity="0..1" />
+          <End Role="Computers" Type="Self.Computers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConfigurationProfiles">
+              <PropertyRef Name="ProfileID" />
+            </Principal>
+            <Dependent Role="Computers">
+              <PropertyRef Name="ProfileID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Computers__Statu__3B75D760">
+          <End Role="ComputerStatuses" Type="Self.ComputerStatuses" Multiplicity="1" />
+          <End Role="Computers" Type="Self.Computers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ComputerStatuses">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="Computers">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Installed__Compu__47DBAE45">
+          <End Role="Computers" Type="Self.Computers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InstalledSoftware" Type="Self.InstalledSoftware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="ComputerID" />
+            </Principal>
+            <Dependent Role="InstalledSoftware">
+              <PropertyRef Name="ComputerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Installed__Softw__48CFD27E">
+          <End Role="Software" Type="Self.Software" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InstalledSoftware" Type="Self.InstalledSoftware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Software">
+              <PropertyRef Name="SoftwareID" />
+            </Principal>
+            <Dependent Role="InstalledSoftware">
+              <PropertyRef Name="SoftwareID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProfileSo__Profi__3E52440B">
+          <End Role="ConfigurationProfiles" Type="Self.ConfigurationProfiles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProfileSoftware" Type="Self.ProfileSoftware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConfigurationProfiles">
+              <PropertyRef Name="ProfileID" />
+            </Principal>
+            <Dependent Role="ProfileSoftware">
+              <PropertyRef Name="ProfileID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProfileSo__Softw__3F466844">
+          <End Role="Software" Type="Self.Software" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProfileSoftware" Type="Self.ProfileSoftware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Software">
+              <PropertyRef Name="SoftwareID" />
+            </Principal>
+            <Dependent Role="ProfileSoftware">
+              <PropertyRef Name="SoftwareID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__RoleID__29572725">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WorkstationManagerDB_v2ModelStoreContainer">
+          <EntitySet Name="ActionLog" EntityType="Self.ActionLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Computers" EntityType="Self.Computers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ComputerStatuses" EntityType="Self.ComputerStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfigurationProfiles" EntityType="Self.ConfigurationProfiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InstalledSoftware" EntityType="Self.InstalledSoftware" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProfileSoftware" EntityType="Self.ProfileSoftware" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Software" EntityType="Self.Software" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ActionLog__Compu__4316F928" Association="Self.FK__ActionLog__Compu__4316F928">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="ActionLog" EntitySet="ActionLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ActionLog__UserI__440B1D61" Association="Self.FK__ActionLog__UserI__440B1D61">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ActionLog" EntitySet="ActionLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Computers__Emplo__398D8EEE" Association="Self.FK__Computers__Emplo__398D8EEE">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Computers" EntitySet="Computers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Computers__Profi__3A81B327" Association="Self.FK__Computers__Profi__3A81B327">
+            <End Role="ConfigurationProfiles" EntitySet="ConfigurationProfiles" />
+            <End Role="Computers" EntitySet="Computers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Computers__Statu__3B75D760" Association="Self.FK__Computers__Statu__3B75D760">
+            <End Role="ComputerStatuses" EntitySet="ComputerStatuses" />
+            <End Role="Computers" EntitySet="Computers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Installed__Compu__47DBAE45" Association="Self.FK__Installed__Compu__47DBAE45">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="InstalledSoftware" EntitySet="InstalledSoftware" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Installed__Softw__48CFD27E" Association="Self.FK__Installed__Softw__48CFD27E">
+            <End Role="Software" EntitySet="Software" />
+            <End Role="InstalledSoftware" EntitySet="InstalledSoftware" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProfileSo__Profi__3E52440B" Association="Self.FK__ProfileSo__Profi__3E52440B">
+            <End Role="ConfigurationProfiles" EntitySet="ConfigurationProfiles" />
+            <End Role="ProfileSoftware" EntitySet="ProfileSoftware" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProfileSo__Softw__3F466844" Association="Self.FK__ProfileSo__Softw__3F466844">
+            <End Role="Software" EntitySet="Software" />
+            <End Role="ProfileSoftware" EntitySet="ProfileSoftware" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__RoleID__29572725" Association="Self.FK__Users__RoleID__29572725">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WorkstationManagerDB_v2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ActionLog">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ComputerID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ActionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LogText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Computer" Relationship="Self.FK__ActionLog__Compu__4316F928" FromRole="ActionLog" ToRole="Computers" />
+          <NavigationProperty Name="User" Relationship="Self.FK__ActionLog__UserI__440B1D61" FromRole="ActionLog" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Computer">
+          <Key>
+            <PropertyRef Name="ComputerID" />
+          </Key>
+          <Property Name="ComputerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="InventoryNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Manufacturer" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="ProfileID" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ActionLogs" Relationship="Self.FK__ActionLog__Compu__4316F928" FromRole="Computers" ToRole="ActionLog" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__Computers__Emplo__398D8EEE" FromRole="Computers" ToRole="Employees" />
+          <NavigationProperty Name="ConfigurationProfile" Relationship="Self.FK__Computers__Profi__3A81B327" FromRole="Computers" ToRole="ConfigurationProfiles" />
+          <NavigationProperty Name="ComputerStatus" Relationship="Self.FK__Computers__Statu__3B75D760" FromRole="Computers" ToRole="ComputerStatuses" />
+          <NavigationProperty Name="InstalledSoftwares" Relationship="Self.FK__Installed__Compu__47DBAE45" FromRole="Computers" ToRole="InstalledSoftware" />
+        </EntityType>
+        <EntityType Name="ComputerStatus">
+          <Key>
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="StatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK__Computers__Statu__3B75D760" FromRole="ComputerStatuses" ToRole="Computers" />
+        </EntityType>
+        <EntityType Name="ConfigurationProfile">
+          <Key>
+            <PropertyRef Name="ProfileID" />
+          </Key>
+          <Property Name="ProfileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK__Computers__Profi__3A81B327" FromRole="ConfigurationProfiles" ToRole="Computers" />
+          <NavigationProperty Name="Softwares" Relationship="Self.ProfileSoftware" FromRole="ConfigurationProfiles" ToRole="Software" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Department" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK__Computers__Emplo__398D8EEE" FromRole="Employees" ToRole="Computers" />
+        </EntityType>
+        <EntityType Name="InstalledSoftware">
+          <Key>
+            <PropertyRef Name="ComputerID" />
+            <PropertyRef Name="SoftwareID" />
+          </Key>
+          <Property Name="ComputerID" Type="Int32" Nullable="false" />
+          <Property Name="SoftwareID" Type="Int32" Nullable="false" />
+          <Property Name="IsInstalled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Computer" Relationship="Self.FK__Installed__Compu__47DBAE45" FromRole="InstalledSoftware" ToRole="Computers" />
+          <NavigationProperty Name="Software" Relationship="Self.FK__Installed__Softw__48CFD27E" FromRole="InstalledSoftware" ToRole="Software" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Users__RoleID__29572725" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Software">
+          <Key>
+            <PropertyRef Name="SoftwareID" />
+          </Key>
+          <Property Name="SoftwareID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Publisher" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Version" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="InstalledSoftwares" Relationship="Self.FK__Installed__Softw__48CFD27E" FromRole="Software" ToRole="InstalledSoftware" />
+          <NavigationProperty Name="ConfigurationProfiles" Relationship="Self.ProfileSoftware" FromRole="Software" ToRole="ConfigurationProfiles" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ActionLogs" Relationship="Self.FK__ActionLog__UserI__440B1D61" FromRole="Users" ToRole="ActionLog" />
+          <NavigationProperty Name="Role" Relationship="Self.FK__Users__RoleID__29572725" FromRole="Users" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK__ActionLog__Compu__4316F928">
+          <End Role="Computers" Type="Self.Computer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActionLog" Type="Self.ActionLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="ComputerID" />
+            </Principal>
+            <Dependent Role="ActionLog">
+              <PropertyRef Name="ComputerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ActionLog__UserI__440B1D61">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="ActionLog" Type="Self.ActionLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ActionLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Computers__Emplo__398D8EEE">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Computers" Type="Self.Computer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Computers">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Computers__Profi__3A81B327">
+          <End Role="ConfigurationProfiles" Type="Self.ConfigurationProfile" Multiplicity="0..1" />
+          <End Role="Computers" Type="Self.Computer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConfigurationProfiles">
+              <PropertyRef Name="ProfileID" />
+            </Principal>
+            <Dependent Role="Computers">
+              <PropertyRef Name="ProfileID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Computers__Statu__3B75D760">
+          <End Role="ComputerStatuses" Type="Self.ComputerStatus" Multiplicity="1" />
+          <End Role="Computers" Type="Self.Computer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ComputerStatuses">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="Computers">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Installed__Compu__47DBAE45">
+          <End Role="Computers" Type="Self.Computer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InstalledSoftware" Type="Self.InstalledSoftware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="ComputerID" />
+            </Principal>
+            <Dependent Role="InstalledSoftware">
+              <PropertyRef Name="ComputerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Installed__Softw__48CFD27E">
+          <End Role="Software" Type="Self.Software" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InstalledSoftware" Type="Self.InstalledSoftware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Software">
+              <PropertyRef Name="SoftwareID" />
+            </Principal>
+            <Dependent Role="InstalledSoftware">
+              <PropertyRef Name="SoftwareID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__RoleID__29572725">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ProfileSoftware">
+          <End Role="ConfigurationProfiles" Type="Self.ConfigurationProfile" Multiplicity="*" />
+          <End Role="Software" Type="Self.Software" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="WorkstationManagerDB_v2Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ActionLogs" EntityType="Self.ActionLog" />
+          <EntitySet Name="Computers" EntityType="Self.Computer" />
+          <EntitySet Name="ComputerStatuses" EntityType="Self.ComputerStatus" />
+          <EntitySet Name="ConfigurationProfiles" EntityType="Self.ConfigurationProfile" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="InstalledSoftwares" EntityType="Self.InstalledSoftware" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="Softwares" EntityType="Self.Software" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK__ActionLog__Compu__4316F928" Association="Self.FK__ActionLog__Compu__4316F928">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="ActionLog" EntitySet="ActionLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ActionLog__UserI__440B1D61" Association="Self.FK__ActionLog__UserI__440B1D61">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ActionLog" EntitySet="ActionLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Computers__Emplo__398D8EEE" Association="Self.FK__Computers__Emplo__398D8EEE">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Computers" EntitySet="Computers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Computers__Profi__3A81B327" Association="Self.FK__Computers__Profi__3A81B327">
+            <End Role="ConfigurationProfiles" EntitySet="ConfigurationProfiles" />
+            <End Role="Computers" EntitySet="Computers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Computers__Statu__3B75D760" Association="Self.FK__Computers__Statu__3B75D760">
+            <End Role="ComputerStatuses" EntitySet="ComputerStatuses" />
+            <End Role="Computers" EntitySet="Computers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Installed__Compu__47DBAE45" Association="Self.FK__Installed__Compu__47DBAE45">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="InstalledSoftware" EntitySet="InstalledSoftwares" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Installed__Softw__48CFD27E" Association="Self.FK__Installed__Softw__48CFD27E">
+            <End Role="Software" EntitySet="Softwares" />
+            <End Role="InstalledSoftware" EntitySet="InstalledSoftwares" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__RoleID__29572725" Association="Self.FK__Users__RoleID__29572725">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="ProfileSoftware" Association="Self.ProfileSoftware">
+            <End Role="ConfigurationProfiles" EntitySet="ConfigurationProfiles" />
+            <End Role="Software" EntitySet="Softwares" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WorkstationManagerDB_v2ModelStoreContainer" CdmEntityContainer="WorkstationManagerDB_v2Entities">
+          <EntitySetMapping Name="ActionLogs">
+            <EntityTypeMapping TypeName="WorkstationManagerDB_v2Model.ActionLog">
+              <MappingFragment StoreEntitySet="ActionLog">
+                <ScalarProperty Name="LogID" ColumnName="LogID" />
+                <ScalarProperty Name="ComputerID" ColumnName="ComputerID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="LogText" ColumnName="LogText" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Computers">
+            <EntityTypeMapping TypeName="WorkstationManagerDB_v2Model.Computer">
+              <MappingFragment StoreEntitySet="Computers">
+                <ScalarProperty Name="ComputerID" ColumnName="ComputerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="InventoryNumber" ColumnName="InventoryNumber" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ProfileID" ColumnName="ProfileID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ComputerStatuses">
+            <EntityTypeMapping TypeName="WorkstationManagerDB_v2Model.ComputerStatus">
+              <MappingFragment StoreEntitySet="ComputerStatuses">
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigurationProfiles">
+            <EntityTypeMapping TypeName="WorkstationManagerDB_v2Model.ConfigurationProfile">
+              <MappingFragment StoreEntitySet="ConfigurationProfiles">
+                <ScalarProperty Name="ProfileID" ColumnName="ProfileID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="WorkstationManagerDB_v2Model.Employee">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InstalledSoftwares">
+            <EntityTypeMapping TypeName="WorkstationManagerDB_v2Model.InstalledSoftware">
+              <MappingFragment StoreEntitySet="InstalledSoftware">
+                <ScalarProperty Name="ComputerID" ColumnName="ComputerID" />
+                <ScalarProperty Name="SoftwareID" ColumnName="SoftwareID" />
+                <ScalarProperty Name="IsInstalled" ColumnName="IsInstalled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="WorkstationManagerDB_v2Model.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Softwares">
+            <EntityTypeMapping TypeName="WorkstationManagerDB_v2Model.Software">
+              <MappingFragment StoreEntitySet="Software">
+                <ScalarProperty Name="SoftwareID" ColumnName="SoftwareID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Publisher" ColumnName="Publisher" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="WorkstationManagerDB_v2Model.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ProfileSoftware" TypeName="WorkstationManagerDB_v2Model.ProfileSoftware" StoreEntitySet="ProfileSoftware">
+            <EndProperty Name="ConfigurationProfiles">
+              <ScalarProperty Name="ProfileID" ColumnName="ProfileID" />
+            </EndProperty>
+            <EndProperty Name="Software">
+              <ScalarProperty Name="SoftwareID" ColumnName="SoftwareID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

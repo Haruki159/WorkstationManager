@@ -1,0 +1,37 @@
+﻿<Page x:Class="WorkstationManager.PagesFolder.ReportsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WorkstationManager.PagesFolder"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ReportsPage"  Loaded="Page_Loaded">
+
+    <Grid Margin="20">
+        <StackPanel>
+            <TextBlock Text="Отчеты" FontSize="24" FontWeight="Bold" Foreground="#333" Margin="0,0,0,20"/>
+            <GroupBox Header="Отчет-сравнение по профилю" FontSize="16" Padding="15">
+                <StackPanel>
+                    <TextBlock Text="Выберите компьютер для проверки:" Margin="0,0,0,10"/>
+                    <!-- ИЗМЕНЕНО: Добавляем Grid для кнопки обновления -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" 
+                                  x:Name="ComputerSelectionComboBox"
+                                  DisplayMemberPath="Name" 
+                                  SelectedValuePath="ComputerID" 
+                                  Height="35"
+                                  VerticalContentAlignment="Center"
+                                  FontSize="14"/>
+
+                    </Grid>
+                    <Button x:Name="GenerateReportButton" Content="Сформировать отчет" HorizontalAlignment="Left" Padding="15,10" Margin="0,20,0,0" Click="GenerateReportButton_Click"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</Page>

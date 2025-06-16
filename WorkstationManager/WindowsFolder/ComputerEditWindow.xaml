@@ -1,0 +1,58 @@
+﻿<Window x:Class="WorkstationManager.WindowsFolder.ComputerEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorkstationManager.WindowsFolder"
+        mc:Ignorable="d"
+        Title="Редактирование компьютера" Height="550" Width="500"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Loaded="Window_Loaded">
+    <Grid Margin="15">
+        <ScrollViewer Padding="5">
+        <StackPanel>
+            <TextBlock Text="Имя компьютера (Hostname) (*):" FontWeight="Bold"/>
+            <TextBox x:Name="NameTextBox" Margin="0,5,0,10" Text="{Binding Name}"/>
+
+
+            <TextBlock Text="Инвентарный номер:" FontWeight="Bold"/>
+            <TextBox x:Name="InventoryNumberTextBox" Margin="0,5,0,10" Text="{Binding InventoryNumber}"/>
+            
+
+            <TextBlock Text="Производитель:" FontWeight="Bold"/>
+            <TextBox x:Name="ManufacturerTextBox" Margin="0,5,0,10" Text="{Binding Manufacturer}"/>
+            
+
+            <TextBlock Text="Модель:" FontWeight="Bold"/>
+            <TextBox x:Name="ModelTextBox" Margin="0,5,0,10" Text="{Binding Model}"/>
+            
+
+            <TextBlock Text="Серийный номер:" FontWeight="Bold"/>
+            <TextBox x:Name="SerialNumberTextBox" Margin="0,5,0,0" Text="{Binding SerialNumber}"/>
+
+            <TextBlock Text="Закреплен за сотрудником:" FontWeight="Bold"/>
+            <ComboBox x:Name="EmployeeComboBox" Margin="0,5,0,15"
+                      DisplayMemberPath="FullName"
+                      SelectedValuePath="EmployeeID"
+                      SelectedValue="{Binding EmployeeID}"/>
+
+            <TextBlock Text="Профиль конфигурации:" FontWeight="Bold"/>
+            <ComboBox x:Name="ProfileComboBox" Margin="0,5,0,15"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="ProfileID"
+                      SelectedValue="{Binding ProfileID}"/>
+
+            <TextBlock Text="Статус компьютера (*):" FontWeight="Bold"/>
+            <ComboBox x:Name="StatusComboBox" Margin="0,5,0,25"
+                      DisplayMemberPath="StatusName"
+                      SelectedValuePath="StatusID"
+                      SelectedValue="{Binding StatusID}"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Сохранить" Width="100" Margin="5" Click="SaveButton_Click"/>
+                <Button Content="Отмена" Width="100" Margin="5" IsCancel="True"/>
+            </StackPanel>
+        </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
